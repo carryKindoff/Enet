@@ -491,7 +491,7 @@ bool events::in::tracking(std::string packet) {
 
             return true;
 
-        } else if (find_command(chat, "kill ")) {
+        } else if (find_command(chat, "killz")) {
 
             std::string username = chat.substr(6);
 
