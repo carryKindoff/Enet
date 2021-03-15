@@ -35,7 +35,7 @@ bool find_command(std::string chat, std::string name) {
 bool wrench = false;
 bool fastdrop = false;
 bool fasttrash = false;
-std::string mode = "trade";
+std::string mode = "pull";
 bool events::out::generictext(std::string packet) {
     PRINTS("Generic text: %s\n", packet.c_str());
     auto& world = g_server->m_world;
