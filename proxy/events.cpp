@@ -89,9 +89,9 @@ bool events::out::generictext(std::string packet) {
         } else if (find_command(chat, "ghost")) {
             gt::ghost = !gt::ghost;
             if (gt::ghost)
-                gt::send_log("Ghost is now enabled.");
+                gt::send_log("Artik bir hayaletsin! kimse haraket ettigini goremez! hehehe...");
             else
-                gt::send_log("Ghost is now disabled.");
+                gt::send_log("Artik bir hayalet degilsin..");
             return true;
         } else if (find_command(chat, "country ")) {
             std::string cy = chat.substr(9);
@@ -102,9 +102,9 @@ bool events::out::generictext(std::string packet) {
         else if (find_command(chat, "fd")) {
             fastdrop = !fastdrop;
             if (fastdrop)
-                gt::send_log("Fast Drop is now enabled.");
+                gt::send_log("Hizli Drop Aktif! Aman Worldlocklarini kaybetme!.");
             else
-                gt::send_log("Fast Drop is now disabled.");
+                gt::send_log("Hizli drop kapali.");
             return true;
         }
         else if (find_command(chat, "ft")) {
@@ -117,7 +117,7 @@ bool events::out::generictext(std::string packet) {
         }        
         else if (find_command(chat, "wrenchset")) {
             mode = chat.substr(10);
-            gt::send_log("Wrench mode set to " + mode);
+            gt::send_log("Wrench modu artik: " + mode);
             return true;        
         }
         else if (find_command(chat, "wrenchmode")) {
@@ -376,7 +376,7 @@ bool events::in::variantlist(gameupdatepacket_t* packet) {
                 }
             }
         } break;
-        case fnv32("OnSpawn"): {
+        case fnv32("Spam"): {
             std::string meme = varlist.get(1).get_string();
             rtvar var = rtvar::parse(meme);
             auto name = var.find("name");
@@ -436,7 +436,7 @@ bool events::in::gamemessage(std::string packet) {
             g_server->send(false, "action|dialog_return\ndialog_name|friends\nbuttonClicked|friend_all");
         } else if (packet.find("Nobody is currently online with the name") != -1) {
             gt::resolving_uid2 = false;
-            gt::send_log("Target is offline, cant find uid.");
+            gt::send_log("Arastirdigin kisi cevrimdisi hmm.");
         } else if (packet.find("Clever perhaps") != -1) {
             gt::resolving_uid2 = false;
             gt::send_log("Moderator Engellenemez lol.");
