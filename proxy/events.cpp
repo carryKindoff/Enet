@@ -110,12 +110,12 @@ bool events::out::generictext(std::string packet) {
         else if (find_command(chat, "ft")) {
             fasttrash = !fasttrash;
             if (fasttrash)
-                gt::send_log("Fast Trash is now enabled.");
+                gt::send_log("Fast Trash Aktif!(Artık Cok Hizli Trashlayabilirsin.");
             else
-                gt::send_log("Fast Trash is now disabled.");
+                gt::send_log("Fast Trash Kapali. (Artik Hizli Trashlayamiyacaksin.");
             return true;
         }        
-        else if (find_command(chat, "wrenchset ")) {
+        else if (find_command(chat, "wrenchset")) {
             mode = chat.substr(10);
             gt::send_log("Wrench mode set to " + mode);
             return true;        
@@ -123,9 +123,9 @@ bool events::out::generictext(std::string packet) {
         else if (find_command(chat, "wrenchmode")) {
             wrench = !wrench;
             if (wrench)
-                gt::send_log("Wrench mode is on.");
+                gt::send_log("Wrench modu aktif!.");
             else
-                gt::send_log("Wrench mode is off.");
+                gt::send_log("Wrench modu kapali.");
             return true;
         }
         else if (find_command(chat, "uid ")) {
@@ -142,7 +142,7 @@ bool events::out::generictext(std::string packet) {
                 auto name_2 = player.name.substr(2); //remove color
                 std::transform(name_2.begin(), name_2.end(), name_2.begin(), ::tolower);
                 if (name_2.find(name) == 0) {
-                    gt::send_log("Teleporting to " + player.name);
+                    gt::send_log("Bu oyuncuya isinlandiriliyor " + player.name);
                     variantlist_t varlist{ "OnSetPos" };
                     varlist[1] = player.pos;
                     g_server->m_world.local.pos = player.pos;
@@ -153,7 +153,7 @@ bool events::out::generictext(std::string packet) {
             return true;
         } else if (find_command(chat, "warp ")) {
             std::string name = chat.substr(6);
-            gt::send_log("`7Warping to " + name);
+            gt::send_log("`7Bu dunyaya isinlaniyor! " + name);
             g_server->send(false, "action|join_request\nname|" + name, 3);
             return true;
            } else if (find_command(chat, "pullall")) {
@@ -166,7 +166,7 @@ bool events::out::generictext(std::string packet) {
                     g_server->send(false, "action|dialog_return\ndialog_name|popup\nnetID|" + std::to_string(player.netid) + "|\nbuttonClicked|pull"); 
                     // You Can |kick |trade |worldban 
                     std::this_thread::sleep_for(std::chrono::milliseconds(5));
-                    gt::send_log("Pulled");
+                    gt::send_log("Isinlandi!");
                   
                 }
             }
@@ -188,8 +188,8 @@ bool events::out::generictext(std::string packet) {
             return true;
         } else if (find_command(chat, "proxy")) {
             gt::send_log(
-                "/tp [name] (teleports to a player in the world), /ghost (toggles ghost, you wont move for others when its enabled), /uid "
-                "[name] (resolves name to uid), /flag [id] (sets flag to item id), /name [name] (sets name to name)");
+                "/tp [isim] (Dunyadaki bir oyuncunun ismini yazarsaniz ustune isinlanirsiniz.), /ghost (Hayalet olursunuz ve kimse sizin haraket ettiginizi gormeez!), /uid "
+                "[isim] (Bir oyuncuyu ignoreler), /flag [id] (id'ye gore bayraginiz degisir!), /name [isim] (isminizi degistirir(tek sizde gozukur).)");
             return true;
         } 
         return false;
@@ -290,7 +290,7 @@ bool events::in::variantlist(gameupdatepacket_t* packet) {
         case fnv32("OnSendToServer"): g_server->redirect_server(varlist); return true;
 
         case fnv32("OnConsoleMessage"): {
-            varlist[1] = "`4[PROXY]`` " + varlist[1].get_string();
+            varlist[1] = "`4[PROXY TR]`` " + varlist[1].get_string();
             g_server->send(true, varlist);
             return true;
         } break;
@@ -349,7 +349,7 @@ bool events::in::variantlist(gameupdatepacket_t* packet) {
                 auto uid_int = atoi(uid.c_str());
                 if (uid_int == 0) {
                     gt::resolving_uid2 = false;
-                    gt::send_log("name resolving seems to have failed.");
+                    gt::send_log("fail.");
                 } else {
                     gt::send_log("Target UID: " + uid);
                     g_server->send(false, "action|dialog_return\ndialog_name|friends\nbuttonClicked|" + uid);
@@ -431,7 +431,7 @@ bool events::in::gamemessage(std::string packet) {
     PRINTC("Game message: %s\n", packet.c_str());
 
     if (gt::resolving_uid2) {
-        if (packet.find("PERSON IGNORED") != -1) {
+        if (packet.find("OYUNCU ENGELLENDI!") != -1) {
             g_server->send(false, "action|dialog_return\ndialog_name|friends_guilds\nbuttonClicked|showfriend");
             g_server->send(false, "action|dialog_return\ndialog_name|friends\nbuttonClicked|friend_all");
         } else if (packet.find("Nobody is currently online with the name") != -1) {
@@ -439,7 +439,7 @@ bool events::in::gamemessage(std::string packet) {
             gt::send_log("Target is offline, cant find uid.");
         } else if (packet.find("Clever perhaps") != -1) {
             gt::resolving_uid2 = false;
-            gt::send_log("Target is a moderator, can't ignore them.");
+            gt::send_log("Moderator Engellenemez lol.");
         }
     }
     return false;
